@@ -1,29 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { faqs, defaultResponse } = require('./faqData');
+const { handleChat } = require('./routes/chat');
 
 const app = express();
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
 
-app.post('/api/chat', (req, res) => {
-  const { message } = req.body;
-  const userMessage = message.toLowerCase().trim();
-  
-  const match = faqs.find(faq => 
-    faq.keywords.some(keyword => userMessage.includes(keyword))
-  );
-
-  const responseText = match ? match.response() : defaultResponse;
-  
-  res.json({ 
-    message: responseText,
-    timestamp: new Date().toISOString()
-  });
-});
+app.post('/api/chat', handleChat);
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`AVA Chatbot server running on http://localhost:${PORT}`);
 });
