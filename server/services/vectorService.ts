@@ -3,7 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 import { faqData } from '../data/avaFaqData';
 
 const qdrant = new QdrantClient({ url: process.env.QDRANT_URL || 'http://localhost:6333' });
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 const COLLECTION_NAME = 'ava_faqs';
 const VECTOR_SIZE = 768;
@@ -17,11 +17,19 @@ interface FAQEntry {
 }
 
 async function generateEmbedding(text: string): Promise<number[]> {
-  const result = await ai.models.embedContent({
-    model: 'text-embedding-004',
-    content: text
-  });
-  return result.embedding.values;
+  try {
+    const response = await genAI.models.embedContent({
+      model: 'gemini-embedding-001',
+      contents: [text],
+      config: {
+        outputDimensionality: 768
+      }
+    });
+    return response.embeddings?.[0]?.values || [];
+  } catch (error) {
+    console.error("Embedding failed:", error);
+    return new Array(768).fill(0);
+  }
 }
 
 export async function initializeVectorDB(): Promise<void> {
@@ -33,7 +41,7 @@ export async function initializeVectorDB(): Promise<void> {
       await qdrant.createCollection(COLLECTION_NAME, {
         vectors: { size: VECTOR_SIZE, distance: 'Cosine' }
       });
-      console.log('✅ Collection created');
+      console.log('Collection created');
     }
 
     const { count } = await qdrant.count(COLLECTION_NAME);
@@ -65,14 +73,14 @@ async function indexFAQs(): Promise<void> {
 
   const points = await Promise.all(
     entries.map(async (entry) => ({
-      id: entry.id,
+      id: parseInt(entry.id),
       vector: await generateEmbedding(`${entry.question} ${entry.answer}`),
-      payload: entry
+      payload: entry as any
     }))
   );
 
   await qdrant.upsert(COLLECTION_NAME, { points });
-  console.log(`✅ Indexed ${entries.length} FAQs`);
+  console.log(`Indexed ${entries.length} FAQs`);
 }
 
 export async function searchSimilarFAQs(query: string, language: string, limit = 3): Promise<FAQEntry[]> {
@@ -87,7 +95,7 @@ export async function searchSimilarFAQs(query: string, language: string, limit =
       }
     });
 
-    return results.map(r => r.payload as FAQEntry);
+    return results.map(r => r.payload as any as FAQEntry);
   } catch (error) {
     console.error('Search error:', error);
     return [];
