@@ -1,4 +1,19 @@
-const faqData = {
+interface FAQ {
+  keywords: string[];
+  question: string;
+  answer: string;
+}
+
+interface FAQCategory {
+  [key: string]: FAQ[];
+}
+
+interface FAQData {
+  en: FAQCategory;
+  de: FAQCategory;
+}
+
+export const faqData: FAQData = {
   en: {
     about: [
       {
@@ -290,21 +305,3 @@ const faqData = {
     ]
   }
 };
-
-const greetings = {
-  en: {
-    keywords: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening'],
-    response: '👋 Hello! I\'m AVA, your Administrative Virtual Assistant.\n\nI can help you with:\n• Services & Support\n• Documents & Requirements\n• Appointments\n• Pricing\n• Data Protection\n\nHow can I assist you today?'
-  },
-  de: {
-    keywords: ['hallo', 'hi', 'hey', 'guten morgen', 'guten tag', 'guten abend'],
-    response: '👋 Hallo! Ich bin AVA, Ihr Administrative Virtual Assistant.\n\nIch kann Ihnen helfen bei:\n• Dienstleistungen & Support\n• Dokumente & Anforderungen\n• Termine\n• Preise\n• Datenschutz\n\nWie kann ich Ihnen heute helfen?'
-  }
-};
-
-const defaultResponse = {
-  en: '🤔 I\'m not sure about that specific question.\n\nYou can ask me about:\n• AVA services\n• Documents needed\n• Booking appointments\n• Pricing\n• Data protection\n\nOr I can connect you with a human team member.',
-  de: '🤔 Ich bin mir bei dieser spezifischen Frage nicht sicher.\n\nSie können mich fragen nach:\n• AVA-Dienstleistungen\n• Benötigte Dokumente\n• Terminbuchung\n• Preise\n• Datenschutz\n\nOder ich kann Sie mit einem menschlichen Teammitglied verbinden.'
-};
-
-module.exports = { faqData, greetings, defaultResponse };
