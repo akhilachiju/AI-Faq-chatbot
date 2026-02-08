@@ -1,15 +1,17 @@
 # AVA - Administrative Virtual Assistant
 
-A multilingual AI-powered chatbot for administrative support services.
+A multilingual AI-powered chatbot for administrative support services. Built with TypeScript for type safety and enterprise-grade architecture.
 
 ## Features
 
-AI-Powered Responses - Google Gemini AI integration  
-Multilingual Support - English & German with easy language switching   
-Modal Chat Interface - Bottom-right floating chat window  
-Typing Effect - Natural conversation flow  
-Auto-scroll - Latest messages always visible  
-Responsive Design - Works on all screen sizes
+- **AI-Powered Responses** - Google Gemini AI integration  
+- **Multilingual Support** - English & German with easy language switching  
+- **TypeScript** - Full type safety across frontend and backend  
+- **Modal Chat Interface** - Bottom-right floating chat window  
+- **Typing Effect** - Natural conversation flow  
+- **Auto-scroll** - Latest messages always visible  
+- **Responsive Design** - Works on all screen sizes  
+- **Fallback Mechanism** - Rule-based responses when AI is unavailable
 
 ## Topics Covered
 
@@ -25,12 +27,14 @@ Responsive Design - Works on all screen sizes
 
 ### Frontend
 - React 19 + Vite
+- TypeScript
 - Tailwind CSS v4
 - Axios
 - Lucide React (Icons)
 
 ### Backend
 - Node.js + Express
+- TypeScript
 - Google Gemini AI (gemini-3-flash-preview)
 - CORS enabled
 - Retry logic for API reliability
@@ -41,12 +45,13 @@ Responsive Design - Works on all screen sizes
 faq-chatbot/
 ├── server/
 │   ├── data/
-│   │   └── avaFaqData.js      # Multilingual FAQ knowledge base
+│   │   └── avaFaqData.ts      # Multilingual FAQ knowledge base
 │   ├── routes/
-│   │   └── chat.js            # Chat endpoint handler
+│   │   └── chat.ts            # Chat endpoint handler
 │   ├── utils/
-│   │   └── helpers.js         # Helper functions (FAQ matching, context building)
-│   ├── server.js              # Express server setup
+│   │   └── helpers.ts         # Helper functions (FAQ matching, context building)
+│   ├── server.ts              # Express server setup
+│   ├── tsconfig.json          # TypeScript configuration
 │   ├── .env                   # API keys
 │   ├── .env.example           # Environment template
 │   └── package.json
@@ -56,18 +61,20 @@ faq-chatbot/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Home/
-│   │   │   │   ├── Home.jsx
+│   │   │   │   ├── Home.tsx
 │   │   │   │   └── index.js
 │   │   │   └── ChatModal/
-│   │   │       ├── ChatModal.jsx
-│   │   │       ├── ChatHeader.jsx
-│   │   │       ├── LanguageSelector.jsx
-│   │   │       ├── MessageList.jsx
-│   │   │       ├── ChatInput.jsx
+│   │   │       ├── ChatModal.tsx
+│   │   │       ├── ChatHeader.tsx
+│   │   │       ├── LanguageSelector.tsx
+│   │   │       ├── MessageList.tsx
+│   │   │       ├── ChatInput.tsx
 │   │   │       └── index.js
-│   │   ├── App.jsx            # Main app with state management
-│   │   ├── main.jsx
+│   │   ├── App.tsx            # Main app with state management
+│   │   ├── main.tsx
 │   │   └── index.css
+│   ├── tsconfig.json          # TypeScript configuration
+│   ├── tsconfig.node.json     # TypeScript Node config
 │   └── package.json
 └── README.md
 ```
@@ -88,7 +95,7 @@ echo "GEMINI_API_KEY=your_api_key_here" > .env
 
 npm run dev
 ```
-Server runs on `http://localhost:5001`
+Server runs on `http://localhost:6001`
 
 ### 2. Frontend Setup
 ```bash
@@ -144,18 +151,8 @@ API calls automatically retry up to 3 times if the service is overloaded.
 
 ```env
 GEMINI_API_KEY=your_google_gemini_api_key
-PORT=5001
+PORT=6001
 ```
-
-## Future Enhancements
-
-- [ ] More languages (French, Spanish, Italian)
-- [ ] Voice input/output
-- [ ] File upload for documents
-- [ ] Appointment booking integration
-- [ ] Admin dashboard for FAQ management
-- [ ] Analytics & conversation insights
-- [ ] Export chat history
 
 # Get your API key from Google AI Studio
 
@@ -175,4 +172,15 @@ PORT=5001
    ```
 
 6. Restart the server
+
+
+## Future Enhancements
+
+- [ ] More languages (French, Spanish, Italian)
+- [ ] Voice input/output
+- [ ] File upload for documents
+- [ ] Appointment booking integration
+- [ ] Admin dashboard for FAQ management
+- [ ] Analytics & conversation insights
+- [ ] Export chat history
 
