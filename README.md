@@ -4,6 +4,7 @@ A multilingual AI-powered chatbot for administrative support services. Built wit
 
 ## Features
 
+- **RAG Architecture** - Retrieval Augmented Generation for accurate responses
 - **AI-Powered Responses** - Google Gemini AI integration  
 - **Vector Database** - Qdrant for semantic search of FAQs
 - **Semantic Search** - Find relevant FAQs by meaning, not just keywords
@@ -146,6 +147,14 @@ Response:
 ```
 
 ## Key Features Explained
+
+### RAG (Retrieval Augmented Generation)
+The chatbot uses RAG architecture to provide accurate, context-aware responses:
+1. **Retrieval** - Searches vector database for relevant FAQs using semantic similarity
+2. **Augmentation** - Builds context with top 3 most relevant FAQs
+3. **Generation** - AI generates response based on retrieved context
+
+This ensures responses are grounded in your actual FAQ data, not just AI's general knowledge.
 
 ### Vector Database & Semantic Search
 Uses Qdrant to store FAQ embeddings and perform semantic similarity search. Finds relevant FAQs by meaning, not just keyword matching.
