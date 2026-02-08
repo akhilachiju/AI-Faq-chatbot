@@ -33,6 +33,20 @@ services:
     networks:
       - ava-network
 
+  qdrant:
+    image: qdrant/qdrant
+    container_name: ava-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+    networks:
+      - ava-network
+
 networks:
   ava-network:
     driver: bridge
+
+volumes:
+  qdrant_storage:
