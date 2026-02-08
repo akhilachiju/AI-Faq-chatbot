@@ -5,6 +5,8 @@ A multilingual AI-powered chatbot for administrative support services. Built wit
 ## Features
 
 - **AI-Powered Responses** - Google Gemini AI integration  
+- **Vector Database** - Qdrant for semantic search of FAQs
+- **Semantic Search** - Find relevant FAQs by meaning, not just keywords
 - **Multilingual Support** - English & German with easy language switching  
 - **TypeScript** - Full type safety across frontend and backend  
 - **Modal Chat Interface** - Bottom-right floating chat window  
@@ -36,6 +38,8 @@ A multilingual AI-powered chatbot for administrative support services. Built wit
 - Node.js + Express
 - TypeScript
 - Google Gemini AI (gemini-3-flash-preview)
+- Google Gemini Embeddings (gemini-embedding-001)
+- Qdrant Vector Database
 - CORS enabled
 - Retry logic for API reliability
 
@@ -48,9 +52,12 @@ faq-chatbot/
 │   │   └── avaFaqData.ts      # Multilingual FAQ knowledge base
 │   ├── routes/
 │   │   └── chat.ts            # Chat endpoint handler
+│   ├── services/
+│   │   └── vectorService.ts   # Vector database operations
 │   ├── utils/
 │   │   └── helpers.ts         # Helper functions (FAQ matching, context building)
 │   ├── server.ts              # Express server setup
+│   ├── test-vector.ts         # Vector database test script
 │   ├── tsconfig.json          # TypeScript configuration
 │   ├── .env                   # API keys
 │   ├── .env.example           # Environment template
@@ -83,21 +90,29 @@ faq-chatbot/
 
 ### Prerequisites
 - Node.js (v18+)
+- Docker & Docker Compose
 - Google Gemini API Key
 
-### 1. Backend Setup
+### 1. Start Qdrant Vector Database
+```bash
+docker-compose up -d qdrant
+```
+Qdrant runs on `http://localhost:6333`
+
+### 2. Backend Setup
 ```bash
 cd server
 npm install
 
 # Create .env file
 echo "GEMINI_API_KEY=your_api_key_here" > .env
+echo "QDRANT_URL=http://localhost:6333" >> .env
 
 npm run dev
 ```
 Server runs on `http://localhost:6001`
 
-### 2. Frontend Setup
+### 3. Frontend Setup
 ```bash
 cd client
 npm install
@@ -132,6 +147,9 @@ Response:
 
 ## Key Features Explained
 
+### Vector Database & Semantic Search
+Uses Qdrant to store FAQ embeddings and perform semantic similarity search. Finds relevant FAQs by meaning, not just keyword matching.
+
 ### AI with Fallback Mechanism
 When Gemini AI is unavailable (quota exceeded, network error), the system automatically falls back to rule-based keyword matching using the FAQ database, ensuring users always get answers.
 
@@ -152,17 +170,10 @@ API calls automatically retry up to 3 times if the service is overloaded.
 ```env
 GEMINI_API_KEY=your_google_gemini_api_key
 PORT=6001
+QDRANT_URL=http://localhost:6333
 ```
 
-# Get your API key from Google AI Studio
-
-## Steps:
-
-1. Go to: https://aistudio.google.com/app/apikey
-
-2. Sign in with your Google account
-
-3. Click "Create API Key"
+See `GEMINI_SETUP.md` for API key setup instructions.
 
 4. Copy the key
 
