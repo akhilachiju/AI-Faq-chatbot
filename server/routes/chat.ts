@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { GoogleGenAI } from '@google/genai';
-import { buildFAQContext, findBestMatch } from '../utils/helpers';
+import { searchSimilarFAQs } from '../services/vectorService';
+import { findBestMatch } from '../utils/helpers';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
@@ -13,16 +14,22 @@ export async function handleChat(req: Request, res: Response): Promise<void> {
   try {
     const { message, language = 'en' }: ChatRequest = req.body;
     
-    const faqContext = buildFAQContext(language);
+    // Use vector search to find relevant FAQs
+    const relevantFAQs = await searchSimilarFAQs(message, language, 3);
+    
+    const ragContext = relevantFAQs.length > 0
+      ? relevantFAQs.map(faq => `Q: ${faq.question}\nA: ${faq.answer}`).join('\n\n')
+      : '';
+    
     const languageInstruction = language === 'de' 
       ? 'Antworte auf Deutsch.' 
       : 'Respond in English.';
     
     const systemPrompt = `You are AVA (Administrative Virtual Assistant), a helpful assistant for administrative support services. ${languageInstruction}
 
-Use this FAQ knowledge base to answer questions:
+Use these relevant FAQs to answer the user's question:
 
-${faqContext}
+${ragContext}
 
 Guidelines:
 - Be friendly and professional
