@@ -1,4 +1,10 @@
-export default function ChatHeader({ language, onLanguageSwitch, onClose }) {
+interface ChatHeaderProps {
+  language: 'en' | 'de' | null;
+  onLanguageSwitch: () => void;
+  onClose: () => void;
+}
+
+export default function ChatHeader({ language, onLanguageSwitch, onClose }: ChatHeaderProps) {
   return (
     <div className="bg-black text-white p-4 flex justify-between items-center border-b border-white/20 rounded-t-2xl">
       <div>

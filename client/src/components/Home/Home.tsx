@@ -1,6 +1,10 @@
 import { MessagesSquare } from 'lucide-react';
 
-export default function Home({ onStartChat }) {
+interface HomeProps {
+  onStartChat: () => void;
+}
+
+export default function Home({ onStartChat }: HomeProps) {
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-8">
       <div className="max-w-5xl w-full">

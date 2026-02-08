@@ -1,4 +1,16 @@
-export default function MessageList({ messages, typingMessage, loading, messagesEndRef }) {
+interface Message {
+  text: string;
+  sender: 'user' | 'bot';
+}
+
+interface MessageListProps {
+  messages: Message[];
+  typingMessage: string;
+  loading: boolean;
+  messagesEndRef: React.RefObject<HTMLDivElement>;
+}
+
+export default function MessageList({ messages, typingMessage, loading, messagesEndRef }: MessageListProps) {
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-black">
       {messages.map((msg, i) => (

@@ -1,6 +1,13 @@
 import { Send } from 'lucide-react';
 
-export default function ChatInput({ input, language, onInputChange, onSubmit }) {
+interface ChatInputProps {
+  input: string;
+  language: 'en' | 'de' | null;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: React.FormEvent) => void;
+}
+
+export default function ChatInput({ input, language, onInputChange, onSubmit }: ChatInputProps) {
   return (
     <form
       onSubmit={onSubmit}

@@ -1,4 +1,8 @@
-export default function LanguageSelector({ onSelectLanguage }) {
+interface LanguageSelectorProps {
+  onSelectLanguage: (lang: 'en' | 'de') => void;
+}
+
+export default function LanguageSelector({ onSelectLanguage }: LanguageSelectorProps) {
   return (
     <div className="flex-1 flex items-center justify-center p-6 bg-black rounded-b-2xl">
       <div className="space-y-4 w-full">

@@ -1,11 +1,17 @@
-const { GoogleGenAI } = require('@google/genai');
-const { buildFAQContext, findBestMatch } = require('../utils/helpers');
+import { Request, Response } from 'express';
+import { GoogleGenAI } from '@google/genai';
+import { buildFAQContext, findBestMatch } from '../utils/helpers';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
-async function handleChat(req, res) {
+interface ChatRequest {
+  message: string;
+  language?: 'en' | 'de';
+}
+
+export async function handleChat(req: Request, res: Response): Promise<void> {
   try {
-    const { message, language = 'en' } = req.body;
+    const { message, language = 'en' }: ChatRequest = req.body;
     
     const faqContext = buildFAQContext(language);
     const languageInstruction = language === 'de' 
@@ -25,7 +31,7 @@ Guidelines:
 - If asked about something not in the FAQs, politely say you can connect them with a team member
 - Stay focused on administrative services`;
 
-    let response;
+    let response: any;
     let retries = 3;
     let useFallback = false;
     
@@ -36,7 +42,7 @@ Guidelines:
           contents: `${systemPrompt}\n\nUser: ${message}`
         });
         break;
-      } catch (error) {
+      } catch (error: any) {
         retries--;
         if (retries === 0) {
           console.log('AI failed, using fallback');
@@ -61,8 +67,8 @@ Guidelines:
     });
   } catch (error) {
     console.error('Error:', error);
-    const { language: lang = 'en' } = req.body;
-    const errorMsg = lang === 'de' 
+    const { language = 'en' }: ChatRequest = req.body;
+    const errorMsg = language === 'de' 
       ? 'Entschuldigung, der Service ist momentan überlastet. Bitte versuchen Sie es in einem Moment erneut.'
       : 'Sorry, the service is currently overloaded. Please try again in a moment.';
     res.status(500).json({ 
@@ -71,5 +77,3 @@ Guidelines:
     });
   }
 }
-
-module.exports = { handleChat };
