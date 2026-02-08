@@ -81,11 +81,34 @@ faq-chatbot/
 
 ## Setup & Installation
 
-### Prerequisites
+### Option 1: Docker (Recommended)
+
+**Prerequisites:**
+- Docker & Docker Compose
+
+**Quick Start:**
+```bash
+# 1. Add your API key to server/.env
+cp server/.env.example server/.env
+# Edit server/.env and add your GEMINI_API_KEY
+
+# 2. Start all services
+docker compose up
+
+# Access the app
+# Frontend: http://localhost:5173
+# Backend: http://localhost:6001
+```
+
+See [DOCKER.md](DOCKER.md) for detailed Docker documentation.
+
+### Option 2: Local Development
+
+**Prerequisites:**
 - Node.js (v18+)
 - Google Gemini API Key
 
-### 1. Backend Setup
+**1. Backend Setup**
 ```bash
 cd server
 npm install
@@ -97,7 +120,7 @@ npm run dev
 ```
 Server runs on `http://localhost:6001`
 
-### 2. Frontend Setup
+**2. Frontend Setup**
 ```bash
 cd client
 npm install
